@@ -1,10 +1,16 @@
 import os
 import openai
 
+# ENV 로드
 from dotenv import load_dotenv
 load_dotenv()
 
+# ENV를 통한 API_KEY 등록
 openai.api_key = os.getenv("OPENAI_API_KEY")
+
+
+# GPT 응답 받아오기
+# Completion : 일반적인 새로운 텍스트를 형성하는 방식
 response = openai.Completion.create(
     engine="gpt-3.5-turbo-instruct",
     prompt="""
@@ -17,6 +23,7 @@ print(response)
 print(response.choices[0].text.strip())
 
 
+# ChatCompletion : 이전의 대화를 인지하고 이어서 하는 방식
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[
