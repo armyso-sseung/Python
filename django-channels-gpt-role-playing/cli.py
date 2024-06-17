@@ -115,7 +115,7 @@ def main():
     while line := input("[name] ").strip():
         # 추천 표현 요청
         if line == "!recommend":
-            recommend_message = gpt_query(RECOMMEND_PROMPT, skip_save=True)
+            recommend_message = gpt_query(RECOMMEND_PROMPT, True)
             print("추천 표현: ", recommend_message)
 
         # 음성 지원 요청
