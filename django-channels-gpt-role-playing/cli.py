@@ -12,7 +12,7 @@ from gtts import gTTS
 load_dotenv()
 
 # ENV를 통한 API_KEY 등록
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 # 상황극 설정
@@ -67,12 +67,8 @@ def gpt_query(user_query: str, skip_save: bool = False) -> str:
         "content": user_query,
     })
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-    )
-
-    assistant_message = response["choices"][0]["message"]["content"]
+    response = client.chat.completions.create(model="gpt-3.5-turbo", messages=messages)
+    assistant_message = response.choices[0].message.content
     if skip_save is False:
         messages.append({
             "role": "assistant",
