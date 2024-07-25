@@ -12,12 +12,23 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+def setVideoSpeed(browser):
+    # 영상 속도 변경
+    browser.execute_script('''
+        setInterval(() => {
+            document.getElementsByTagName("video")[0].playbackRate = 3.8;
+        }, 5000);
+    ''')
+
 def getVideoTag(browser, iframe):
     try:
         # iframe 전환
         browser.switch_to.frame(iframe)
         videos = browser.find_elements(By.CSS_SELECTOR, 'video')
         if (len(videos) > 0):
+            # 영상 음소거
+            browser.execute_script("return arguments[0].muted = true;", videos[0])
+        
             paused = browser.execute_script("return arguments[0].paused;", videos[0])
             if (paused):
                 # 영상 재생버튼 클릭
@@ -25,13 +36,10 @@ def getVideoTag(browser, iframe):
                 if (len(buttos) > 0):
                     browser.execute_script("arguments[0].click();", buttos[0])
                     time.sleep(2)
+
+                setVideoSpeed(browser)
             else:
-                # 영상 속도 변경
-                browser.execute_script('''
-                    setInterval(() => {
-                        document.getElementsByTagName("video")[0].playbackRate = 3.8;
-                    }, 5000);
-                ''')
+                setVideoSpeed(browser)
                 return
             
     except Exception as e:
@@ -47,7 +55,7 @@ def main():
     
     # 회원정보
     USER_ID = '아이디'
-    USER_PWD = '패스워드'
+    USER_PWD = '패스워드'
 
     # 브라우저 꺼짐 방지 옵션
     chrome_options = Options()
