@@ -290,3 +290,5 @@ pyrightconfig.json
 inflearn_chatGPT-main/
 
 .DS_Store
+
+pythone/.idea/
