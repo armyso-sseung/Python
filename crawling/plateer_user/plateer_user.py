@@ -19,6 +19,9 @@ import requests
 import threading
 
 
+"""
+    DB 위치 조회 함수
+"""
 def current_databse_path():
     """
         하기 순차 조건
@@ -86,6 +89,9 @@ class MainWindow(QWidget, Ui_Plateer):
         conn.commit()
         conn.close()
 
+    """
+        크롤링 쓰레드 영역
+    """
     def plateer_user_update_init(self):
         if not self.email.text() or not self.password.text():
             return QMessageBox.warning(self, '', '이메일과 비밀번호는 필수값입니다.')
@@ -94,6 +100,9 @@ class MainWindow(QWidget, Ui_Plateer):
         # self.thread = threading.Thread(target=self.plateer_user_update_core)
         # self.thread.start()
 
+    """
+        크롤링 코어 영역
+    """
     def plateer_user_update_core(self):
         # 셀레리움 옵션
         options = Options()
@@ -121,6 +130,9 @@ class MainWindow(QWidget, Ui_Plateer):
         finally:
             driver.quit()
 
+    """
+        MS Office 로그인
+    """
     def login_msoffice(self, driver):
         # 로그인
         WebDriverWait(driver, 10).until(
@@ -142,6 +154,9 @@ class MainWindow(QWidget, Ui_Plateer):
         driver.find_element(By.CSS_SELECTOR, "#idSIButton9").click()
         time.sleep(1)
 
+    """
+        플래티어 사이트 로그인
+    """
     def login_plateer(self, driver):
         # MS 연동창
         driver.get("https://gw.plateer.com/")
@@ -150,6 +165,9 @@ class MainWindow(QWidget, Ui_Plateer):
         driver.find_element(By.CSS_SELECTOR, "#tilesHolder > div.tile-container > div > div.table").click()
         time.sleep(1)
 
+    """
+        사용자 API 호출 및 DB 저장
+    """
     def update_plateer_user(self, driver):
         db_path = current_databse_path()
 
@@ -187,6 +205,9 @@ class MainWindow(QWidget, Ui_Plateer):
         QMessageBox.warning(self, '', '사용자 정보가 업데이트 되었습니다.')
         self.load_user_data('')
 
+    """
+        사용자 검색
+    """
     def plateer_user_search(self):
         self.load_user_data(self.search.text())
 
@@ -208,6 +229,9 @@ class MainWindow(QWidget, Ui_Plateer):
         except requests.RequestException as e:
             user.setIcon(QPixmap(100, 100))
 
+    """
+        사용자 조회 및 화면 업데이트
+    """
     def load_user_data(self, search):
         # 헤더 설정
         self.model.clear()
